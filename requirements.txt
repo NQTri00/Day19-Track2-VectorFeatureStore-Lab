@@ -19,8 +19,8 @@ httpx>=0.27,<1.0                       # for /search client + tests
 pydantic>=2.9,<3.0
 
 # Data
-polars>=1.13.2,<2.0                    # 1.13.1 was yanked
-pyarrow>=17,<22
+polars>=1.13.2                    # 1.13.1 was yanked
+pyarrow>=17
 
 # Notebook
 jupyterlab>=4.3,<5.0

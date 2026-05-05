@@ -27,6 +27,16 @@ FEAST_DIR = REPO_ROOT / "app" / "feast_repo"
 FEAST_DATA = FEAST_DIR / "data"
 FEAST_DATA.mkdir(exist_ok=True)
 
+# Detect feast executable path relative to current python (works in venv)
+import os
+import sys
+FEAST_CMD = os.path.join(os.path.dirname(sys.executable), "feast")
+if os.name == "nt" and not FEAST_CMD.endswith(".exe"):
+    FEAST_CMD += ".exe"
+if not os.path.exists(FEAST_CMD):
+    # Fallback to "feast" if not found in same dir (legacy/global)
+    FEAST_CMD = "feast"
+
 # %% [markdown]
 # ## 1. Sinh dữ liệu offline (Parquet) cho 3 feature views
 #
@@ -84,7 +94,7 @@ for p in sorted(FEAST_DATA.glob("*.parquet")):
 
 # %%
 res = subprocess.run(
-    ["feast", "apply"],
+    [FEAST_CMD, "apply"],
     cwd=str(FEAST_DIR),
     capture_output=True, text=True, check=False,
 )
@@ -104,7 +114,7 @@ assert res.returncode == 0, f"feast apply failed: {res.stderr}"
 # %%
 end_dt = NOW.strftime("%Y-%m-%dT%H:%M:%S")
 res = subprocess.run(
-    ["feast", "materialize-incremental", end_dt],
+    [FEAST_CMD, "materialize-incremental", end_dt],
     cwd=str(FEAST_DIR),
     capture_output=True, text=True, check=False,
 )

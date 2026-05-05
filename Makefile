@@ -2,12 +2,15 @@
 ## Two paths: lightweight (default, no Docker) and full Docker.
 
 VENV     := .venv
-PY       := $(VENV)/bin/python
-PIP      := $(VENV)/bin/pip
-JUPYTER  := $(VENV)/bin/jupyter
-JUPYTEXT := $(VENV)/bin/jupytext
-UVICORN  := $(VENV)/bin/uvicorn
-PYTEST   := $(VENV)/bin/pytest
+# Detect Windows (Scripts) vs Unix (bin)
+BIN      := $(shell if [ -d "$(VENV)/Scripts" ]; then echo Scripts; else echo bin; fi)
+
+PY       := $(VENV)/$(BIN)/python
+PIP      := $(VENV)/$(BIN)/pip
+JUPYTER  := $(VENV)/$(BIN)/jupyter
+JUPYTEXT := $(VENV)/$(BIN)/jupytext
+UVICORN  := $(VENV)/$(BIN)/uvicorn
+PYTEST   := $(VENV)/$(BIN)/pytest
 
 .DEFAULT_GOAL := help
 
